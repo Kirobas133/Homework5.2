@@ -8,6 +8,10 @@ private:
 
 public:
 	smart_array(int elems) {
+		if (elems == 0) {
+			std::cout << "Warning! Attempt to create array zero lenth! Lenth changed to 1!";
+			elems = 1;
+		}
 		elementcounts = 0;
 		array = new int[elems];
 		arraysize = elems;
@@ -32,7 +36,7 @@ public:
 		}
 		elementcounts++;
 	}
-	int get_element(int indx) {
+	int get_element(size_t indx) {
 		if (indx < elementcounts) {
 			return array[indx];
 		}
@@ -41,6 +45,22 @@ public:
 		}
 	}
 	smart_array& operator = (smart_array& sa) {
+		if ((array == sa.array) && (arraysize == sa.arraysize) && (elementcounts == sa.elementcounts)) {
+			return *this;
+		}
+		else {
+			int* temp = array;
+			arraysize = sa.arraysize;
+			array = new int[arraysize];
+			elementcounts = sa.elementcounts;
+			for (int i = 0; i < arraysize; i++) {
+				array[i] = sa.array[i];
+			}
+			delete[] temp;
+			return *this;
+		}
+	}
+	smart_array(const smart_array& sa) {
 		int* temp = array;
 		arraysize = sa.arraysize;
 		array = new int[arraysize];
@@ -49,7 +69,6 @@ public:
 			array[i] = sa.array[i];
 		}
 		delete[] temp;
-		return *this;
 	}
 };
 
